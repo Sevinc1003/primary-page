@@ -41,6 +41,8 @@ public class User {
 
     private boolean isEnabled = true; //verification elemirik deye
 
+    private LocalDateTime lockTime;
+
     @PrePersist
     protected void onCreate() {
         this.registerDate = LocalDateTime.now();

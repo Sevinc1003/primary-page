@@ -55,6 +55,20 @@ public class UserService {
         User user = repo.findByEmail(
                 req.getEmail().trim().toLowerCase()).orElseThrow(() -> new EntityNotFoundException("User not found"));
 
+        if (user.getLockTime() != null) {
+            if (user.getLockTime().plusSeconds(30).isBefore(LocalDateTime.now())) {
+
+                user.setLockTime(null);
+                user.setFailedAttempts(0);
+                user.setEnabled(true);
+                repo.save(user);
+
+            } else {
+
+                throw new BadCredentialsException("your profile is blocked for 30 seconds.");
+            }
+        }
+
         if (!user.isEnabled()) {
             throw new BadCredentialsException("Account is disabled.");
         }
@@ -63,8 +77,9 @@ public class UserService {
 
             user.setFailedAttempts(user.getFailedAttempts() + 1);
 
-            if (user.getFailedAttempts() == 2) {
+            if (user.getFailedAttempts() == 3) {
                 user.setEnabled(false);
+                user.setLockTime(LocalDateTime.now()); 
             }
 
             repo.save(user);
@@ -73,6 +88,7 @@ public class UserService {
                     "Password or email is incorrect.");
         }
 
+        user.setLockTime(null);
         user.setFailedAttempts(0);
         user.setLastLoginDate(LocalDateTime.now());
         repo.save(user);
