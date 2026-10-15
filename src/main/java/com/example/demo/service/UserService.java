@@ -96,7 +96,6 @@ public class UserService {
         return jwtTokenProvider.generateToken(user.getEmail());
     }
 
-    // controllerde Authentication icinden goturersen username kimi
     public UserDetailsResponse getDetails(String email) {
         User user = repo.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -114,7 +113,6 @@ public class UserService {
         return response;
     }
 
-    // same sh. above
     public void updateProfile(UpdateProfileRequest req, String email) {
 
         User user = repo.findByEmail(email)
@@ -146,7 +144,6 @@ public class UserService {
         user.setPassword(req.getNewPassword());
         repo.save(user);
 
-        // btw burda da tokeni invalid elemek lazimdi.
 
     }
 
