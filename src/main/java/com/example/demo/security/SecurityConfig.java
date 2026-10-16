@@ -29,12 +29,10 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/login").permitAll()
-                        .requestMatchers("/api/user/register").permitAll()                        .requestMatchers("/api/user/login").permitAll()
-                        .requestMatchers("/api/user/profile").authenticated()
-                        .requestMatchers("/api/user/details").authenticated()
-                        .requestMatchers("/api/user/logout").authenticated()
-                        .requestMatchers("/api/user/change-password").authenticated()
+                        .requestMatchers("/api/auth/logout").authenticated()
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        .requestMatchers("/api/user/**").authenticated()
                         .anyRequest().permitAll()
                         
                 )

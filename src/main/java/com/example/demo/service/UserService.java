@@ -1,10 +1,13 @@
 package com.example.demo.service;
 
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.ChangePasswordRequest;
+import com.example.demo.dto.GetUsersResponse;
 import com.example.demo.dto.UpdateProfileRequest;
 import com.example.demo.dto.UserDetailsResponse;
 import com.example.demo.entity.User;
@@ -19,7 +22,6 @@ public class UserService {
 
     private final UserRepository repo;
 
-    
     public UserDetailsResponse getDetails(String email) {
         User user = repo.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -68,7 +70,12 @@ public class UserService {
         user.setPassword(req.getNewPassword());
         repo.save(user);
 
-
     }
+
+
+    public Page<GetUsersResponse> getUsers(int page, int size) {
+            Pageable pageable = PageRequest.of(page, size);
+            return repo.getUsers(pageable);
+        }
 
 }

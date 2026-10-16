@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +45,7 @@ public class UserController {
     @PutMapping("/change-password")
     public ResponseEntity<Void> changePassword(
             @Valid @RequestBody ChangePasswordRequest req,
-            Authentication authentication, 
+            Authentication authentication,
             HttpServletRequest request) {
 
         String email = authentication.getName();
@@ -57,5 +59,15 @@ public class UserController {
         }
 
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping("/page/{page}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    public ResponseEntity<Page<GetUsersResponse>> getUsers(
+            @PathVariable int page,
+            @RequestParam(defaultValue = "10") int size) {
+        
+        return ResponseEntity.ok(service.getUsers(page, size));
     }
 }
