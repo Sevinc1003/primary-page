@@ -3,11 +3,13 @@ package com.example.demo.service;
 import java.time.LocalDateTime;
 
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
+import com.example.demo.enums.Role;
 import com.example.demo.exception.customExceptions.PasswordsAreNotMatchingException;
 import com.example.demo.exception.customExceptions.UserAlreadyExistsException;
 import com.example.demo.repository.UserRepository;
@@ -16,12 +18,12 @@ import com.example.demo.security.JwtTokenProvider;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
-@Service 
-@RequiredArgsConstructor 
+@Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository repo;
-
+    private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
     public void register(RegisterRequest req) {
@@ -41,7 +43,8 @@ public class AuthService {
         user.setEmail(req.getEmail().trim().toLowerCase());
         user.setName(req.getName());
         user.setSurname(req.getSurname());
-        user.setPassword(req.getPassword());
+        user.setPassword(passwordEncoder.encode(req.getPassword()));
+        user.setRole(Role.USER);
 
         repo.save(user);
 
@@ -70,13 +73,12 @@ public class AuthService {
             throw new BadCredentialsException("Account is disabled.");
         }
 
-        if (!req.getPassword().equals(user.getPassword())) {
-
+        if (!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
             user.setFailedAttempts(user.getFailedAttempts() + 1);
 
             if (user.getFailedAttempts() == 3) {
                 user.setEnabled(false);
-                user.setLockTime(LocalDateTime.now()); 
+                user.setLockTime(LocalDateTime.now());
             }
 
             repo.save(user);
@@ -92,6 +94,5 @@ public class AuthService {
 
         return jwtTokenProvider.generateToken(user.getEmail());
     }
-
 
 }
