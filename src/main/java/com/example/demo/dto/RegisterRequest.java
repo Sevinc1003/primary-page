@@ -26,11 +26,21 @@ public class RegisterRequest {
     private String email;
 
     @NotBlank
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "passwordu duz ele")
+    @NotBlank(message = "Password cannot be empty")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Pattern(regexp = ".*[A-Z].*", message = "Password must contain at least one uppercase letter")
+    @Pattern(regexp = ".*[a-z].*", message = "Password must contain at least one lowercase letter")
+    @Pattern(regexp = ".*\\d.*", message = "Password must contain at least one digit")
+    @Pattern(regexp = ".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*", message = "Password must contain at least one special character")
     private String password;
 
     @NotBlank
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "passwordu strong ele")
+    @NotBlank(message = "Password cannot be empty")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Pattern(regexp = ".*[A-Z].*", message = "Password must contain at least one uppercase letter")
+    @Pattern(regexp = ".*[a-z].*", message = "Password must contain at least one lowercase letter")
+    @Pattern(regexp = ".*\\d.*", message = "Password must contain at least one digit")
+    @Pattern(regexp = ".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*", message = "Password must contain at least one special character")
     private String repeatPassword;
 
 }
