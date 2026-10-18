@@ -6,8 +6,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.auth.LoginRequest;
+import com.example.demo.dto.auth.LoginResponse;
+import com.example.demo.dto.auth.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.enums.Role;
 import com.example.demo.exception.customExceptions.PasswordsAreNotMatchingException;
@@ -50,7 +51,7 @@ public class AuthService {
 
     }
 
-    public String login(LoginRequest req) {
+    public LoginResponse login(LoginRequest req) {
 
         User user = repo.findByEmail(
                 req.getEmail().trim().toLowerCase()).orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -92,7 +93,17 @@ public class AuthService {
         user.setLastLoginDate(LocalDateTime.now());
         repo.save(user);
 
-        return jwtTokenProvider.generateToken(user.getEmail());
+
+        String token = jwtTokenProvider.generateToken(user.getEmail());
+
+        LoginResponse response = new LoginResponse();
+
+        response.setEmail(user.getEmail());
+        response.setRole(user.getRole());
+        response.setToken(token);
+        response.setExpiryDate(LocalDateTime.now().plusHours(1));
+
+        return response;
     }
 
 }

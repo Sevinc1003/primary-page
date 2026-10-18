@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.auth.LoginRequest;
+import com.example.demo.dto.auth.LoginResponse;
+import com.example.demo.dto.auth.RegisterRequest;
 import com.example.demo.service.AuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,12 +38,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(
+    public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest req) {
 
-        String token = service.login(req);
+        LoginResponse response = service.login(req);
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(response);
     }
 
 
