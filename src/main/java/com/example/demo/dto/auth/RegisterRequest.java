@@ -10,8 +10,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class RegisterRequest {
+
+    public RegisterRequest() {
+    }
 
     @NotBlank
     @Size(min = 2, max = 50, message = "name has not a good length")

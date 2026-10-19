@@ -5,14 +5,15 @@ import java.time.LocalDateTime;
 import com.example.demo.enums.Role;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter 
 @Setter 
-@NoArgsConstructor 
 public class LoginResponse {
+    
 
+    public LoginResponse() {
+    }
     private String token;
     private String email;
     private Role role;

@@ -8,9 +8,12 @@ import lombok.Setter;
 
 @Getter 
 @Setter 
-@NoArgsConstructor 
 public class UserDetailsResponse {
 
+    public UserDetailsResponse() {
+    }
+
+    
     private Long id;
     private String name;
     private String surname;

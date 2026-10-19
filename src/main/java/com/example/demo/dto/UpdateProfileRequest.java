@@ -8,8 +8,10 @@ import lombok.Setter;
 
 @Setter 
 @Getter 
-@NoArgsConstructor 
 public class UpdateProfileRequest {
+
+    public UpdateProfileRequest() {
+    }
 
     @NotBlank
     @Size(min = 2, max = 50, message = "name has not a good length")

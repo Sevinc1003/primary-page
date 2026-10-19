@@ -2,17 +2,23 @@ package com.example.demo.dto;
 
 import java.time.LocalDateTime;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter 
 @Setter 
-@NoArgsConstructor 
-@AllArgsConstructor 
 public class GetUsersResponse {
 
+
+
+    public GetUsersResponse(String name, String surname, String email, LocalDateTime registerDate,
+            LocalDateTime lastLoginDate) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.registerDate = registerDate;
+        this.lastLoginDate = lastLoginDate;
+    }
     private String name;
 
     private String surname;
